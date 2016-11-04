@@ -1,6 +1,6 @@
 import numpy as np
 from scipy import sparse
-
+import math
 
 class LogisticRegression:
     def __init__(self):
@@ -35,7 +35,10 @@ class LogisticRegression:
         # Run stochastic gradient descent to optimize W
         self.loss_history = []
         for it in xrange(num_iters):
-            #########################################################################
+            doc_num = np.random.choice(num_train, batch_size)
+            X_batch = np.zeros(batch_size, dim)
+            y_batch = np.zeros(batch_size, )
+            for i in size(doc_num): #########################################################################
             # TODO:                                                                 #
             # Sample batch_size elements from the training data and their           #
             # corresponding labels to use in this round of gradient descent.        #
@@ -46,7 +49,8 @@ class LogisticRegression:
             # Hint: Use np.random.choice to generate indices. Sampling with         #
             # replacement is faster than sampling without replacement.              #
             #########################################################################
-
+                X_batch[i] = X[doc_num[i], ]
+                y_batch[i] = y[doc_num[i]]   
 
             #########################################################################
             #                       END OF YOUR CODE                                #
@@ -60,7 +64,7 @@ class LogisticRegression:
             # TODO:                                                                 #
             # Update the weights using the gradient and the learning rate.          #
             #########################################################################
-
+            self.w = self.w - gradW 
 
             #########################################################################
             #                       END OF YOUR CODE                                #
@@ -117,7 +121,7 @@ class LogisticRegression:
         # Implement this method. Store the predicted labels in y_pred.            #
         ###########################################################################
         y_proba = self.predict_proba(X, append_bias=True)
-        y_pred = ...
+        #y_pred = ...
 
         ###########################################################################
         #                           END OF YOUR CODE                              #
@@ -137,12 +141,18 @@ class LogisticRegression:
         dw = np.zeros_like(self.w)  # initialize the gradient as zero
         loss = 0
         # Compute loss and gradient. Your code should not contain python loops.
-
-
+        i = np.random.randrage(0, len(y_batch), 1)
+        M_i = y_batch[i]*(self.w[i]*X_batch[i])
+        loss = log1p( math.exp(-M_i) ) # loss'(M) = sum(dl/dmi), 
+        dw = - y_batch[i]* X_batch[i]* math.exp(-M_i) / ( 1 + math.exp(-M_i) )
+        
         # Right now the loss is a sum over all training examples, but we want it
         # to be an average instead so we divide by num_train.
         # Note that the same thing must be done with gradient.
-
+        if (loss < reg):
+            loss = 0
+        if (dw < reg):
+            dw = 0 
 
         # Add regularization to the loss and gradient.
         # Note that you have to exclude bias term in regularization.
